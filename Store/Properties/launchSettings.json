@@ -10,7 +10,7 @@
   },
   "profiles": {
     "http": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "login.html",
@@ -20,7 +20,7 @@
       }
     },
     "https": {
-      "commandName": "Project",
+      "commandName": "IISExpress",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "login.html",

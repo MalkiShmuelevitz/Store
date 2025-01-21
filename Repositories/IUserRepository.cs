@@ -6,6 +6,8 @@ namespace Repositories
     {
         Task<User> Post(User user);
         Task<User> PostLoginR(string username, string password);
-        void Put(int id,User user1);
+        Task Put(int id,User user1);
+        Task<User> GetById(int id);
+
     }
 }

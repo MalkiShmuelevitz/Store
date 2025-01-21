@@ -13,6 +13,11 @@ namespace Services
             _iuserRepository = iuserRepository;
         }
 
+        public async Task<User> GetById(int id)
+        {
+            return await _iuserRepository.GetById(id);
+        }
+
         public Task<User> PostLoginS(string username, string password)
         {
 
@@ -29,9 +34,9 @@ namespace Services
             var result = Zxcvbn.Core.EvaluatePassword(password);
             return result.Score;
         }
-        public void Put(int id, User user)
+        public  async Task Put(int id, User user)
         {
-            _iuserRepository.Put(id, user);
+          await  _iuserRepository.Put(id, user);
         }
     }
 }

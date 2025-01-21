@@ -45,8 +45,10 @@ const login = async () => {
         const dataLogin = await data.json()
         console.log('post data',dataLogin)
         //sessionStorage
-        sessionStorage.setItem("id", dataLogin.userId)
-        window.location.href = 'userDetails.html'
+        sessionStorage.setItem("id", dataLogin.id)
+        const cart=[]
+        sessionStorage.setItem("Cart",JSON.stringify(cart))
+        window.location.href = 'Products.html'
     }
     catch (error) {
         console.log(error)
@@ -79,10 +81,10 @@ const register = async () => {
             },
             body: JSON.stringify(user)
         });
-         if (postFromData.status == 400) {
+         if (postFromData.status == 404) {
             alert('all fields are requird')
         }
-        if (postFromData.status == 404) {
+        if (postFromData.status == 400) {
             alert('your password not enough strength')
         }
        

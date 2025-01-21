@@ -2,57 +2,69 @@
 using System.Text.Json;
 using Services;
 using Entities;
+using AutoMapper;
+using DTO;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Store.Controllers
 {
-    
+
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly ILogger<UsersController> _logger;
         IUserService _iuserservice;
+        IMapper _imapper;
 
-        public UsersController(IUserService iuserservice)
+      
+        public UsersController(IUserService iuserservice,  IMapper imapper,ILogger<UsersController> logger)
         {
            _iuserservice = iuserservice;
+            _imapper = imapper;
+            _logger = logger;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "how", "are you" };
-        }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<GetUserDTO>> GetById(int id)
         {
-            return "value";
+           User user= await _iuserservice.GetById(id);
+            GetUserDTO userDTO = _imapper.Map<User, GetUserDTO>(user);
+            if (userDTO == null)
+                return NoContent();
+            return Ok(userDTO);
         }
 
         // POST api/<UsersController>0w
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<User>> PostLogin([FromQuery] string username,string password)
+        public async Task<ActionResult<GetUserDTO>> PostLogin([FromQuery] string username,string password)
         {
-            //where we will put the ask of the null?
+            
             User user = await _iuserservice.PostLoginS(username, password);
-            if (user != null)
-                return Ok(user);
+            GetUserDTO userDTO=_imapper.Map<User,GetUserDTO>(user);
+            if (userDTO != null) {
+                _logger.LogCritical($"Login with user name - {username} and password - {password}");
+                return Ok(userDTO);
+            }
             return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostNewUser([FromBody] User user)
+        public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
         {
             int result = _iuserservice.CheckPassword(user.Password);
             if (result <= 3)
-                return NotFound(result);
-            User newUser =  await _iuserservice.Post(user);
-            if (newUser != null)
-                return Ok(newUser);
+                return BadRequest();
+            User user1 = _imapper.Map<UserDTO, User>(user);
+            User newUser =  await _iuserservice.Post(user1);
+            UserDTO newUserDTO = _imapper.Map<User, UserDTO>(newUser);
+            if (newUserDTO != null)
+                return Ok(newUserDTO);
+                //return CreatedAtAction(nameof(GetById),new { id = newUser.Id }, newUser);
             return NoContent();
 
         }
@@ -67,16 +79,10 @@ namespace Store.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User userFromClient)
+        public async Task Put(int id, [FromBody] UserDTO user)
         {
-            _iuserservice.Put(id, userFromClient);
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-
+            User user1 = _imapper.Map<UserDTO, User>(user);
+          await _iuserservice.Put(id, user1);
         }
 
      
