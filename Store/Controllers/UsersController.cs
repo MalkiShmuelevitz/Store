@@ -56,11 +56,10 @@ namespace Store.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostNewUser([FromBody] UserDTO user)
         {
-            int result = _iuserservice.CheckPassword(user.Password);
-            if (result <= 3)
-                return BadRequest();
             User user1 = _imapper.Map<UserDTO, User>(user);
             User newUser =  await _iuserservice.Post(user1);
+            if (newUser == null)
+                return BadRequest();
             UserDTO newUserDTO = _imapper.Map<User, UserDTO>(newUser);
             if (newUserDTO != null)
                 return Ok(newUserDTO);

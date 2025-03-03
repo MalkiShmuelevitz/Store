@@ -23,10 +23,13 @@ namespace Services
 
             return _iuserRepository.PostLoginR(username, password);
         }
-        public Task<User> Post(User user)
+        public async Task<User> Post(User user)
         {
-
-            return _iuserRepository.Post(user);
+            int result = CheckPassword(user.Password);
+            if (result <= 3)
+                return null;
+            await _iuserRepository.Post(user);
+            return user;
         }
 
         public int CheckPassword(string password)

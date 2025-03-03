@@ -44,6 +44,8 @@ const deleteProductInCart = (pName) => {
     console.log(cart)
     sessionStorage.setItem("Cart", JSON.stringify(cart))
     document.querySelector("tbody").innerHTML = ""
+    //totalAmountAndPrice()
+    totalPrice = 0;
     drawProductsInCart()
 }
 
@@ -55,14 +57,22 @@ const placeOrder = async () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body:JSON.stringify(order)
-        })
+            body: JSON.stringify(order)
+        });
+        
+        //if (orderData.orderItems.length == 0) {
+        //    alert("your cart is empty!")
+        //}
+        if (data.status == 401) {
+            alert("YOU CAN NOT COMPLETE THIS ORDER 😣😬")
+        }
         let orderData = await data.json()
-        if (data.status == 400) {
+       
+       else if (data.status == 400) {
                alert(`Your order can not complete`)
         }
         else {
-            alert("your order place successfully!!!")
+            alert(`your order ${orderData.id} place successfully!!!`)
             sessionStorage.setItem("Cart", JSON.stringify([]))
             window.location.href = "products.html"
 }

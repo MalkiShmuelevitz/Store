@@ -2,8 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Repositories;
 using Services;
-using Store;
 using NLog.Web;
+using Store.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

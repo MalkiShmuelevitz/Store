@@ -48,7 +48,7 @@ const login = async () => {
         sessionStorage.setItem("id", dataLogin.id)
         const cart=[]
         sessionStorage.setItem("Cart",JSON.stringify(cart))
-        window.location.href = 'Products.html'
+        window.location.href = 'Options.html'
     }
     catch (error) {
         console.log(error)
@@ -70,9 +70,15 @@ const register = async () => {
     const user = getDataFromRegister()
 
     try {
+        if (user.username == null || user.password == null) {
+            throw new Error("username and password are requird")
+        }
       
-        if (user.password.length > 20 || user.password.length < 5) {
-            throw new Error("the password must be between 5 to 20")
+        if (user.username.length > 50) {
+            throw new Error("the username must be smaller than 50")
+        }
+        if (user.password.length > 20) {
+            throw new Error("the password must be smaller than 20")
         }
         const postFromData = await fetch("api/Users", {
             method: 'POST',
@@ -87,10 +93,13 @@ const register = async () => {
         if (postFromData.status == 400) {
             alert('your password not enough strength')
         }
-       
+        else {
+            alert("user register succesfully!!!")
+        }
         const dataPost = await postFromData.json()
         console.log('post data', dataPost)
         console.log(dataPost)
+       
     }
       
     catch (error) {
@@ -128,7 +137,8 @@ const updateUser = async () => {
         if (updateFromData.status == 400) {
             throw new Error("all fields are required")
         }
-        alert(`user ${sessionStorage.getItem("id") } update`)
+        alert(`user ${sessionStorage.getItem("id")} update`)
+        window.location.href="Options.html"
     }
     catch (error) {
         alert(error)

@@ -27,7 +27,7 @@ namespace Repositories
         }
         public async Task<User> Post(User user)
         {
-          await _managerApiContext.Users.AddAsync(user);
+          var user1=await _managerApiContext.Users.AddAsync(user);
           await _managerApiContext.SaveChangesAsync();
           return user;
         }

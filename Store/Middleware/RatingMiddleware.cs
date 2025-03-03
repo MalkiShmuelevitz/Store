@@ -4,7 +4,7 @@ using Repositories;
 using System.Threading.Tasks;
 using Entities;
 
-namespace Store
+namespace Store.Middleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class RatingMiddleware
@@ -16,7 +16,7 @@ namespace Store
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext,IRatingRepository _ratingRepository)
+        public async Task Invoke(HttpContext httpContext, IRatingRepository _ratingRepository)
         {
             Rating rating = new()
             {
@@ -27,7 +27,7 @@ namespace Store
                 UserAgent = httpContext.Request.Headers.UserAgent.ToString(),
                 RecordDate = DateTime.Now
             };
-           await _ratingRepository.AddRating(rating);
+            await _ratingRepository.AddRating(rating);
             await _next(httpContext);
         }
     }
