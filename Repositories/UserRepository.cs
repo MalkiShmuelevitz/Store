@@ -29,14 +29,14 @@ namespace Repositories
         {
           var user1=await _managerApiContext.Users.AddAsync(user);
           await _managerApiContext.SaveChangesAsync();
-          return user;
+          return user1.Entity;
         }
-        public async Task Put(int id,User user1)
+        public async Task<User> Put(int id,User user1)
         {
             user1.Id = id;
-            _managerApiContext.Users.Update(user1);
+            var user= _managerApiContext.Users.Update(user1);
             await _managerApiContext.SaveChangesAsync();
-          
+          return user.Entity;
         }
     }
 }

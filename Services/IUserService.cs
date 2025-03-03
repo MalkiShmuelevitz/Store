@@ -8,6 +8,6 @@ namespace Services
         Task<User> GetById(int id);
         Task<User> Post(User user);
         Task<User> PostLoginS(string username, string password);
-        Task Put(int id, User user);
+        Task<User> Put(int id, User user);
     }
 }

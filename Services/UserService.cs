@@ -37,9 +37,12 @@ namespace Services
             var result = Zxcvbn.Core.EvaluatePassword(password);
             return result.Score;
         }
-        public  async Task Put(int id, User user)
+        public async Task<User> Put(int id, User user)
         {
-          await  _iuserRepository.Put(id, user);
+            int result = CheckPassword(user.Password);
+            if (result <= 3)
+                return null;
+            return await _iuserRepository.Put(id, user);
         }
     }
 }
